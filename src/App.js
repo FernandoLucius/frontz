@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+
 
 function App() {
+
+  const [responseData, setResponseData] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch('https://nodejs-express-api2.herokuapp.com/users')
+      // fetch('https://api.github.com/users/guilhermesantoss')  
+      .then(response => {
+        if (response.status !== 200) {
+          console.log("Deu ruim");
+          return;
+        }
+
+        response.json().then(data => setResponseData(data))
+      })
+      .catch(error => console.log("Erro: ", error));
+
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Hello world</h1>
+      <ul>
+        {responseData.map(user => {
+          return(
+            <li key={user.id}>{`Nome: ${user.firstName}`}</li>          
+          )
+        }) }
+      </ul>
     </div>
   );
+
 }
 
 export default App;
